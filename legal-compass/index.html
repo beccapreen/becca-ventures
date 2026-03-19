@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Legal Compass — App Concept</title>
+<style>
+  :root {
+    --bg: #f8f7f2;
+    --bg2: #f0ede4;
+    --card: #ffffff;
+    --border: #e8e2d4;
+    --navy: #1a2744;
+    --navy2: #243058;
+    --gold: #c9983a;
+    --gold-light: #f5ead4;
+    --red: #c0392b;
+    --red-bg: #fdf0ee;
+    --amber: #b7770d;
+    --amber-bg: #fef9ec;
+    --green: #1a7a4a;
+    --green-bg: #edf7f2;
+    --text: #1a1a2e;
+    --muted: #6b7280;
+    --accent: #2563eb;
+    --accent-bg: #eff6ff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+    color: white;
+    padding: 56px 40px 48px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '⚖️';
+    position: absolute;
+    font-size: 220px;
+    opacity: 0.04;
+    top: -40px; left: -40px;
+  }
+  header::after {
+    content: '🧭';
+    position: absolute;
+    font-size: 180px;
+    opacity: 0.04;
+    bottom: -30px; right: -20px;
+  }
+  .header-badge {
+    display: inline-block;
+    border: 1px solid rgba(201,152,58,0.6);
+    color: var(--gold);
+    border-radius: 20px;
+    padding: 4px 18px;
+    font-size: 0.75rem;
+    font-family: sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-size: 3rem;
+    font-weight: normal;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    color: white;
+  }
+  header h1 span { color: var(--gold); }
+  header .tagline {
+    font-size: 1.05rem;
+    opacity: 0.75;
+    font-family: sans-serif;
+    font-style: italic;
+    max-width: 520px;
+    margin: 0 auto 24px;
+  }
+  .header-pills {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 5px 16px;
+    font-size: 0.78rem;
+    font-family: sans-serif;
+  }
+
+  /* STATS */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border-bottom: 2px solid var(--border);
+  }
+  .stat-box {
+    background: var(--card);
+    padding: 24px 20px;
+    text-align: center;
+  }
+  .stat-box .num { font-size: 2rem; font-weight: bold; color: var(--navy); display: block; }
+  .stat-box .lbl { font-size: 0.75rem; color: var(--muted); font-family: sans-serif; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* LAYOUT */
+  .container { max-width: 1100px; margin: 0 auto; padding: 48px 24px; }
+
+  /* SECTIONS */
+  .section-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 24px; margin-top: 48px;
+  }
+  .section-header h2 { font-size: 1.2rem; font-weight: normal; color: var(--navy); white-space: nowrap; }
+  .section-header .line { flex: 1; height: 1px; background: var(--border); }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .card:hover { box-shadow: 0 4px 20px rgba(26,39,68,0.08); transform: translateY(-2px); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+  /* PHONE MOCKUP */
+  .phone-section {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .phone {
+    background: var(--navy);
+    border-radius: 44px;
+    padding: 12px;
+    box-shadow: 0 20px 60px rgba(26,39,68,0.25);
+  }
+  .phone-screen {
+    background: white;
+    border-radius: 36px;
+    overflow: hidden;
+    min-height: 500px;
+  }
+  .ps-header {
+    background: var(--navy);
+    padding: 28px 20px 20px;
+    text-align: center;
+    position: relative;
+  }
+  .ps-notch {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 80px; height: 26px;
+    background: #0d1520;
+    border-radius: 0 0 16px 16px;
+  }
+  .ps-compass { font-size: 2rem; margin-bottom: 6px; display: block; }
+  .ps-title { color: white; font-size: 0.9rem; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .ps-sub { color: rgba(255,255,255,0.5); font-size: 0.68rem; font-family: sans-serif; }
+  .ps-body { padding: 16px; }
+  .ps-search {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.75rem;
+    font-family: sans-serif;
+    color: var(--muted);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ps-country {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: sans-serif;
+    font-size: 0.78rem;
+  }
+  .ps-flag { font-size: 1.2rem; }
+  .ps-cname { font-weight: bold; color: var(--navy); font-size: 0.8rem; }
+  .ps-ctag { font-size: 0.65rem; color: var(--muted); }
+  .ps-traffic {
+    margin-left: auto;
+    display: flex;
+    gap: 3px;
+  }
+  .ps-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .dot-g { background: #22c55e; }
+  .dot-a { background: #f59e0b; }
+  .dot-r { background: #ef4444; }
+  .ps-section-title {
+    font-size: 0.65rem;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin: 12px 0 8px;
+  }
+  .ps-alert {
+    background: var(--amber-bg);
+    border: 1px solid rgba(183,119,13,0.2);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.7rem;
+    font-family: sans-serif;
+    color: var(--amber);
+    margin-bottom: 6px;
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+
+  /* COUNTRY CARDS */
+  .country-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .country-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    font-family: sans-serif;
+  }
+  .cc-flag { font-size: 2rem; margin-bottom: 8px; display: block; }
+  .cc-name { font-size: 0.82rem; font-weight: bold; color: var(--navy); margin-bottom: 6px; }
+  .cc-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; }
+  .cc-tag {
+    font-size: 0.6rem;
+    padding: 2px 7px;
+    border-radius: 8px;
+    background: var(--bg2);
+    color: var(--muted);
+  }
+  .cc-tag.hot { background: var(--red-bg); color: var(--red); }
+  .cc-tag.warn { background: var(--amber-bg); color: var(--amber); }
+  .cc-tag.ok { background: var(--green-bg); color: var(--green); }
+
+  /* FEATURES */
+  .feature-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+  }
+  .fc-icon { font-size: 1.6rem; margin-bottom: 10px; }
+  .fc-title { font-size: 0.95rem; font-weight: bold; color: var(--navy); margin-bottom: 6px; }
+  .fc-desc { font-size: 0.82rem; font-family: sans-serif; color: var(--muted); line-height: 1.6; }
+
+  /* LIABILITY TABLE */
+  .liability-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: sans-serif;
+    font-size: 0.84rem;
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .liability-table th {
+    background: var(--navy);
+    color: white;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: normal;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .liability-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .liability-table tr:last-child td { border-bottom: none; }
+  .liability-table tr:hover td { background: var(--bg); }
+  .risk-high { color: var(--red); font-weight: bold; }
+  .risk-med { color: var(--amber); font-weight: bold; }
+  .risk-low { color: var(--green); font-weight: bold; }
+
+  /* TRAFFIC LIGHT SYSTEM */
+  .tl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .tl-card {
+    border-radius: 14px;
+    padding: 22px;
+    border: 1px solid transparent;
+  }
+  .tl-green { background: var(--green-bg); border-color: rgba(26,122,74,0.2); }
+  .tl-amber { background: var(--amber-bg); border-color: rgba(183,119,13,0.2); }
+  .tl-red { background: var(--red-bg); border-color: rgba(192,57,43,0.2); }
+  .tl-dot { width: 20px; height: 20px; border-radius: 50%; margin-bottom: 12px; }
+  .tl-dot-g { background: #22c55e; }
+  .tl-dot-a { background: #f59e0b; }
+  .tl-dot-r { background: #ef4444; }
+  .tl-title { font-size: 0.95rem; font-weight: bold; margin-bottom: 6px; }
+  .tl-green .tl-title { color: var(--green); }
+  .tl-amber .tl-title { color: var(--amber); }
+  .tl-red .tl-title { color: var(--red); }
+  .tl-desc { font-size: 0.8rem; font-family: sans-serif; color: var(--muted); line-height: 1.6; }
+  .tl-examples { margin-top: 8px; font-size: 0.75rem; font-style: italic; color: var(--muted); }
+
+  /* REVENUE */
+  .rev-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .rev-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    border-top: 3px solid var(--gold);
+  }
+  .rev-icon { font-size: 1.6rem; margin-bottom: 8px; }
+  .rev-title { font-size: 0.9rem; color: var(--navy); font-weight: bold; margin-bottom: 6px; }
+  .rev-desc { font-size: 0.78rem; font-family: sans-serif; color: var(--muted); line-height: 1.5; }
+  .rev-price { font-size: 1.1rem; color: var(--gold); margin-top: 10px; font-family: sans-serif; font-weight: bold; }
+
+  /* FOUNDER FIT */
+  .founder-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .ff-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--navy);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 12px;
+    font-family: sans-serif;
+    font-size: 0.84rem;
+  }
+  .ff-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .ff-title { font-weight: bold; color: var(--navy); margin-bottom: 4px; }
+  .ff-desc { color: var(--muted); line-height: 1.5; font-size: 0.8rem; }
+
+  /* ROADMAP */
+  .roadmap { display: flex; flex-direction: column; gap: 12px; }
+  .rm-item {
+    display: flex;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: sans-serif;
+    font-size: 0.84rem;
+    align-items: flex-start;
+  }
+  .rm-phase {
+    background: var(--navy);
+    color: white;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .rm-title { font-weight: bold; color: var(--navy); margin-bottom: 4px; }
+  .rm-desc { color: var(--muted); font-size: 0.8rem; line-height: 1.5; }
+
+  /* QUESTIONS */
+  .q-list { display: flex; flex-direction: column; gap: 10px; }
+  .q-item {
+    display: flex;
+    gap: 14px;
+    padding: 16px 20px;
+    background: var(--accent-bg);
+    border: 1px solid rgba(37,99,235,0.15);
+    border-radius: 12px;
+    font-family: sans-serif;
+    font-size: 0.86rem;
+  }
+  .q-num { font-weight: bold; color: var(--accent); flex-shrink: 0; min-width: 24px; }
+  .q-text { line-height: 1.6; }
+  .q-why { font-size: 0.75rem; color: var(--muted); margin-top: 4px; font-style: italic; }
+
+  /* COMP TABLE */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: sans-serif;
+    font-size: 0.82rem;
+    background: var(--card);
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .comp-table th {
+    background: var(--navy);
+    color: white;
+    padding: 11px 16px;
+    text-align: left;
+    font-weight: normal;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .comp-table td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    color: var(--muted);
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table td:first-child { font-weight: bold; color: var(--navy); }
+  .yes { color: var(--green); font-weight: bold; }
+  .no { color: var(--red); }
+  .partial { color: var(--amber); }
+
+  footer {
+    text-align: center;
+    padding: 36px 24px;
+    font-family: sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  footer strong { color: var(--navy); }
+
+  @media (max-width: 700px) {
+    .grid-2, .grid-3, .tl-grid, .rev-grid, .founder-grid, .country-grid { grid-template-columns: 1fr; }
+    .phone-section { grid-template-columns: 1fr; }
+    .phone { max-width: 260px; margin: 0 auto; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    header h1 { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">⚖️ App Concept · March 2026</div>
+  <h1>The Legal <span>Compass</span></h1>
+  <p class="tagline">"Know your rights, wherever you are. Plain language. No lawyer required."</p>
+  <div class="header-pills">
+    <span class="pill">🌍 Multi-country</span>
+    <span class="pill">⚖️ Legal awareness</span>
+    <span class="pill">✈️ Travel + Expat</span>
+    <span class="pill">📱 iOS + Android</span>
+    <span class="pill">🔒 Liability-safe model</span>
+  </div>
+</header>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-box">
+    <span class="num">1.4B</span>
+    <span class="lbl">International trips taken annually</span>
+  </div>
+  <div class="stat-box">
+    <span class="num">$0</span>
+    <span class="lbl">Cost of knowing your rights in advance</span>
+  </div>
+  <div class="stat-box">
+    <span class="num">195</span>
+    <span class="lbl">Countries. 195 different legal systems.</span>
+  </div>
+  <div class="stat-box">
+    <span class="num">0</span>
+    <span class="lbl">Apps that do this well right now</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- VISION -->
+  <div class="section-header">
+    <h2>⚖️ The Vision</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="phone-section" style="margin-bottom:16px">
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="ps-header">
+          <div class="ps-notch"></div>
+          <span class="ps-compass">🧭</span>
+          <div class="ps-title">THE LEGAL COMPASS</div>
+          <div class="ps-sub">Your rights, wherever you are</div>
+        </div>
+        <div class="ps-body">
+          <div class="ps-search">🔍 Search a country...</div>
+          <div class="ps-section-title">Your trips</div>
+          <div class="ps-country">
+            <span class="ps-flag">🇹🇭</span>
+            <div>
+              <div class="ps-cname">Thailand</div>
+              <div class="ps-ctag">15 things to know · 2 alerts</div>
+            </div>
+            <div class="ps-traffic">
+              <div class="ps-dot dot-g"></div>
+              <div class="ps-dot dot-a"></div>
+              <div class="ps-dot dot-r"></div>
+            </div>
+          </div>
+          <div class="ps-country">
+            <span class="ps-flag">🇰🇾</span>
+            <div>
+              <div class="ps-cname">Cayman Islands</div>
+              <div class="ps-ctag">8 things to know · 0 alerts</div>
+            </div>
+            <div class="ps-traffic">
+              <div class="ps-dot dot-g"></div>
+              <div class="ps-dot dot-g"></div>
+              <div class="ps-dot dot-g"></div>
+            </div>
+          </div>
+          <div class="ps-country">
+            <span class="ps-flag">🇬🇧</span>
+            <div>
+              <div class="ps-cname">United Kingdom</div>
+              <div class="ps-ctag">12 things to know · 0 alerts</div>
+            </div>
+            <div class="ps-traffic">
+              <div class="ps-dot dot-g"></div>
+              <div class="ps-dot dot-g"></div>
+              <div class="ps-dot dot-a"></div>
+            </div>
+          </div>
+          <div class="ps-section-title">⚠️ Active alerts</div>
+          <div class="ps-alert">⚠️ <span><strong>Thailand:</strong> Lèse-majesté laws — criticism of the monarchy is a criminal offence. Applies to social media posts.</span></div>
+          <div class="ps-alert" style="background:var(--red-bg);border-color:rgba(192,57,43,0.2);color:var(--red)">🚨 <span><strong>Thailand:</strong> Drug penalties are severe. Possession can result in life imprisonment.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="border-left: 4px solid var(--navy); margin-bottom: 14px;">
+        <div style="font-size:0.75rem;font-family:sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">The Core Idea</div>
+        <p style="font-family:sans-serif;font-size:0.9rem;line-height:1.7;color:var(--text)">
+          The Legal Compass is a beautifully designed mobile app that gives travellers, expats, and globally mobile professionals a <strong>clear, plain-English guide to their legal rights and key laws</strong> in any country — before they land, and when they need it most.
+          <br><br>
+          Think Citizens Advice meets Lonely Planet meets a brilliant lawyer friend who answers in plain English. Switch countries instantly. Get a traffic-light risk overview. Know what to do in an emergency. Find vetted local legal help when you need it.
+          <br><br>
+          Crucially: this is <strong>legal information, not legal advice</strong> — a critical distinction that keeps the model safe. Every piece of content signposts to official government sources and links to verified local lawyers when the user needs more.
+        </p>
+      </div>
+      <div class="card" style="background: #f0f4ff; border-color: rgba(37,99,235,0.2);">
+        <div style="font-size:0.75rem;font-family:sans-serif;color:var(--accent);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">The Gap</div>
+        <p style="font-family:sans-serif;font-size:0.84rem;line-height:1.6;color:var(--muted)">
+          Citizens Advice is UK-only and text-heavy. Gov.uk travel advisories cover safety but not legal rights. Law firms have no consumer product. Legal Zoom is US contracts only. <strong>Nobody owns the "global legal awareness for regular people" space.</strong> It's wide open.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAFFIC LIGHT SYSTEM -->
+  <div class="section-header">
+    <h2>🚦 The Traffic Light Content Model</h2>
+    <div class="line"></div>
+  </div>
+  <p style="font-family:sans-serif;font-size:0.88rem;color:var(--muted);margin-bottom:20px;max-width:700px">Every country profile uses a simple three-tier system that helps users instantly understand their situation — and keeps the app safely in "information" territory, not "advice."</p>
+
+  <div class="tl-grid">
+    <div class="tl-card tl-green">
+      <div class="tl-dot tl-dot-g"></div>
+      <div class="tl-title">🟢 Know Before You Go</div>
+      <div class="tl-desc">General legal context, cultural norms with legal implications, rights you have as a visitor, what to carry (ID requirements), local emergency numbers.</div>
+      <div class="tl-examples">e.g. "In the UK, you have the right to remain silent if arrested." · "In Japan, carry your passport at all times."</div>
+    </div>
+    <div class="tl-card tl-amber">
+      <div class="tl-dot tl-dot-a"></div>
+      <div class="tl-title">🟡 Worth Being Aware</div>
+      <div class="tl-desc">Laws that commonly catch tourists or expats off-guard. Not necessarily dangerous, but worth knowing. Linked to official government sources for verification.</div>
+      <div class="tl-examples">e.g. "In Singapore, chewing gum is restricted." · "In Thailand, it's illegal to step on currency."</div>
+    </div>
+    <div class="tl-card tl-red">
+      <div class="tl-dot tl-dot-r"></div>
+      <div class="tl-title">🔴 Critical Alerts</div>
+      <div class="tl-desc">Laws with severe penalties, rights violations that are documented, or situations requiring immediate legal help. Direct link to local vetted lawyers and embassy contacts.</div>
+      <div class="tl-examples">e.g. "Thailand: lèse-majesté — criticism of the monarchy is a criminal offence." · "Drug possession penalties in this country include life imprisonment."</div>
+    </div>
+  </div>
+
+  <!-- COUNTRY PROFILES -->
+  <div class="section-header">
+    <h2>🌍 Phase 1 Countries</h2>
+    <div class="line"></div>
+  </div>
+  <p style="font-family:sans-serif;font-size:0.88rem;color:var(--muted);margin-bottom:20px">Start with countries you know personally — this ensures content quality and authenticity. Expand based on user demand.</p>
+
+  <div class="country-grid">
+    <div class="country-card">
+      <span class="cc-flag">🇹🇭</span>
+      <div class="cc-name">Thailand</div>
+      <div class="cc-tags">
+        <span class="cc-tag hot">Lèse-majesté</span>
+        <span class="cc-tag hot">Drug laws</span>
+        <span class="cc-tag warn">Visa overstay</span>
+        <span class="cc-tag ok">Tourist rights</span>
+      </div>
+    </div>
+    <div class="country-card">
+      <span class="cc-flag">🇬🇧</span>
+      <div class="cc-name">United Kingdom</div>
+      <div class="cc-tags">
+        <span class="cc-tag ok">Strong rights</span>
+        <span class="cc-tag warn">Post-Brexit travel</span>
+        <span class="cc-tag ok">Citizens Advice</span>
+      </div>
+    </div>
+    <div class="country-card">
+      <span class="cc-flag">🇰🇾</span>
+      <div class="cc-name">Cayman Islands</div>
+      <div class="cc-tags">
+        <span class="cc-tag ok">Expat-friendly</span>
+        <span class="cc-tag warn">Work permit rules</span>
+        <span class="cc-tag ok">NPO law</span>
+      </div>
+    </div>
+    <div class="country-card">
+      <span class="cc-flag">🇺🇸</span>
+      <div class="cc-name">United States</div>
+      <div class="cc-tags">
+        <span class="cc-tag warn">State variation</span>
+        <span class="cc-tag hot">Know your rights</span>
+        <span class="cc-tag warn">ESTA rules</span>
+      </div>
+    </div>
+    <div class="country-card">
+      <span class="cc-flag">🇦🇪</span>
+      <div class="cc-name">UAE / Dubai</div>
+      <div class="cc-tags">
+        <span class="cc-tag hot">Social media laws</span>
+        <span class="cc-tag hot">Alcohol rules</span>
+        <span class="cc-tag warn">Dress code</span>
+      </div>
+    </div>
+    <div class="country-card">
+      <span class="cc-flag">🇸🇬</span>
+      <div class="cc-name">Singapore</div>
+      <div class="cc-tags">
+        <span class="cc-tag hot">Drug laws</span>
+        <span class="cc-tag warn">Fines culture</span>
+        <span class="cc-tag ok">Clear legal system</span>
+      </div>
+    </div>
+    <div class="country-card">
+      <span class="cc-flag">🇯🇲</span>
+      <div class="cc-name">Jamaica</div>
+      <div class="cc-tags">
+        <span class="cc-tag warn">Tourist safety</span>
+        <span class="cc-tag ok">Caribbean rights</span>
+        <span class="cc-tag warn">Drug laws</span>
+      </div>
+    </div>
+    <div class="country-card">
+      <span class="cc-flag">🇪🇺</span>
+      <div class="cc-name">EU (Schengen)</div>
+      <div class="cc-tags">
+        <span class="cc-tag ok">GDPR rights</span>
+        <span class="cc-tag warn">90-day rule</span>
+        <span class="cc-tag ok">Consumer rights</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section-header">
+    <h2>📱 Core Features</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="grid-3">
+    <div class="feature-card">
+      <div class="fc-icon">🧭</div>
+      <div class="fc-title">Country Profiles</div>
+      <div class="fc-desc">Swipeable country cards with traffic-light overview, key laws, tourist rights, emergency contacts, and embassy details. Offline access once downloaded.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🚨</div>
+      <div class="fc-title">Emergency Mode</div>
+      <div class="fc-desc">"I've been arrested" · "My passport was stolen" · "I've been scammed." Step-by-step calm guidance. Embassy number. Local lawyer finder. SOS share location.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">👩‍⚖️</div>
+      <div class="fc-title">Find a Lawyer</div>
+      <div class="fc-desc">Vetted local lawyer directory per country. Filter by language, speciality, price range. This is the referral model — and the primary revenue stream.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">✈️</div>
+      <div class="fc-title">Trip Planner</div>
+      <div class="fc-desc">Add upcoming countries, get a pre-departure legal briefing. "You're travelling to Thailand — here are 5 things to know before you land." Downloadable PDF.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🔔</div>
+      <div class="fc-title">Law Change Alerts</div>
+      <div class="fc-desc">Follow countries you visit regularly. Get notified when laws change. Relevant for expats, digital nomads, and frequent business travellers.</div>
+    </div>
+    <div class="feature-card">
+      <div class="fc-icon">🌐</div>
+      <div class="fc-title">Expat Hub</div>
+      <div class="fc-desc">For people living abroad: work permit rules, residency rights, tax treaty basics, NPO registration guides. Premium tier. High-value, low-competition.</div>
+    </div>
+  </div>
+
+  <!-- LIABILITY FRAMEWORK -->
+  <div class="section-header">
+    <h2>🛡️ Liability Framework — How We Stay Safe</h2>
+    <div class="line"></div>
+  </div>
+
+  <table class="liability-table" style="margin-bottom:16px">
+    <thead>
+      <tr>
+        <th>Risk</th>
+        <th>Level</th>
+        <th>Mitigation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>User acts on content and suffers harm</td>
+        <td class="risk-med">Medium</td>
+        <td>Prominent "information not advice" framing throughout. Onboarding disclaimer. Every article links to official gov source.</td>
+      </tr>
+      <tr>
+        <td>Content becomes outdated / inaccurate</td>
+        <td class="risk-high">High</td>
+        <td>Quarterly content review cycle. Date-stamped articles. "Last verified" shown on every page. User reporting tool.</td>
+      </tr>
+      <tr>
+        <td>Unauthorised practice of law</td>
+        <td class="risk-med">Medium</td>
+        <td>Strict editorial policy: describe the law, never apply it to a specific situation. Legal review of editorial guidelines before launch.</td>
+      </tr>
+      <tr>
+        <td>Country sensitivity / diplomatic risk</td>
+        <td class="risk-low">Low</td>
+        <td>Factual, neutral tone. Cite official sources only. No editorial opinion on governments. Amnesty International model.</td>
+      </tr>
+      <tr>
+        <td>PI insurance availability</td>
+        <td class="risk-med">Medium</td>
+        <td>Obtain from day one. Budget ~$2–5K/year for a startup. Becca's legal background strengthens the application.</td>
+      </tr>
+      <tr>
+        <td>GDPR / data privacy</td>
+        <td class="risk-low">Low</td>
+        <td>Minimal personal data collected. Clear privacy policy. No selling of user data.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="background: var(--green-bg); border: 1px solid rgba(26,122,74,0.2); border-radius: 12px; padding: 18px 22px; font-family: sans-serif; font-size: 0.85rem; color: var(--green); line-height: 1.6;">
+    ✅ <strong>The golden rule:</strong> We describe what the law <em>is</em>. We never say what someone <em>should do</em> in their specific situation. That line, maintained consistently, is what keeps this app in the clear. Becca's LegalTech background means she already understands this distinction intuitively — that's a genuine competitive advantage.
+  </div>
+
+  <!-- COMPETITOR LANDSCAPE -->
+  <div class="section-header">
+    <h2>🔭 Competitive Landscape</h2>
+    <div class="line"></div>
+  </div>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Multi-country</th>
+        <th>Plain English</th>
+        <th>Mobile App</th>
+        <th>Emergency Mode</th>
+        <th>Lawyer Finder</th>
+        <th>Free Tier</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🧭 The Legal Compass</td>
+        <td class="yes">✅ Yes</td>
+        <td class="yes">✅ Yes</td>
+        <td class="yes">✅ Yes</td>
+        <td class="yes">✅ Yes</td>
+        <td class="yes">✅ Yes</td>
+        <td class="yes">✅ Yes</td>
+      </tr>
+      <tr>
+        <td>Citizens Advice (UK)</td>
+        <td class="no">❌ UK only</td>
+        <td class="yes">✅ Yes</td>
+        <td class="partial">⚠️ Basic</td>
+        <td class="no">❌ No</td>
+        <td class="no">❌ No</td>
+        <td class="yes">✅ Yes</td>
+      </tr>
+      <tr>
+        <td>Gov.uk Travel Advice</td>
+        <td class="yes">✅ Yes</td>
+        <td class="partial">⚠️ Partial</td>
+        <td class="no">❌ No</td>
+        <td class="no">❌ No</td>
+        <td class="no">❌ No</td>
+        <td class="yes">✅ Yes</td>
+      </tr>
+      <tr>
+        <td>LegalZoom</td>
+        <td class="no">❌ US only</td>
+        <td class="partial">⚠️ Partial</td>
+        <td class="partial">⚠️ Partial</td>
+        <td class="no">❌ No</td>
+        <td class="yes">✅ Yes</td>
+        <td class="no">❌ No</td>
+      </tr>
+      <tr>
+        <td>Lonely Planet</td>
+        <td class="yes">✅ Yes</td>
+        <td class="yes">✅ Yes</td>
+        <td class="yes">✅ Yes</td>
+        <td class="no">❌ No</td>
+        <td class="no">❌ No</td>
+        <td class="partial">⚠️ Limited</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- REVENUE MODEL -->
+  <div class="section-header">
+    <h2>💰 Revenue Model</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="rev-grid">
+    <div class="rev-card">
+      <div class="rev-icon">🆓</div>
+      <div class="rev-title">Free Tier</div>
+      <div class="rev-desc">3 country profiles, traffic-light overview, emergency contacts, basic know-before-you-go. Enough to be genuinely useful and build trust.</div>
+      <div class="rev-price">Free forever</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-icon">🌍</div>
+      <div class="rev-title">Traveller Premium</div>
+      <div class="rev-desc">Unlimited countries, offline access, trip planner, law change alerts, emergency mode, downloadable pre-trip PDF briefings.</div>
+      <div class="rev-price">~$4.99/month · $39.99/year</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-icon">👩‍⚖️</div>
+      <div class="rev-title">Lawyer Referrals</div>
+      <div class="rev-desc">The real money. Vetted local lawyers pay a listing fee or per-referral commission. Users in genuine legal need convert at high rates. B2B revenue from law firms.</div>
+      <div class="rev-price">$50–200 per referral</div>
+    </div>
+  </div>
+
+  <!-- FOUNDER FIT -->
+  <div class="section-header">
+    <h2>🎯 Why Becca Is the Right Founder</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="founder-grid">
+    <div class="ff-card">
+      <div class="ff-icon">⚖️</div>
+      <div>
+        <div class="ff-title">LegalTech Professional</div>
+        <div class="ff-desc">Understands the information/advice line intuitively. Can credibly speak to law firms for partnerships and content review. Knows what makes legal content trustworthy.</div>
+      </div>
+    </div>
+    <div class="ff-card">
+      <div class="ff-icon">🌍</div>
+      <div>
+        <div class="ff-title">Lived Multi-Country Experience</div>
+        <div class="ff-desc">Living in Cayman, connected to the UK, travelled in SE Asia — the exact use cases the app is built for. Content accuracy comes from lived understanding, not research alone.</div>
+      </div>
+    </div>
+    <div class="ff-card">
+      <div class="ff-icon">🗣️</div>
+      <div>
+        <div class="ff-title">Communication Expert</div>
+        <div class="ff-desc">ESU background means plain-English legal writing comes naturally. "Make the complex simple" is literally what ESU trains. This is a rare skill in the legal information space.</div>
+      </div>
+    </div>
+    <div class="ff-card">
+      <div class="ff-icon">🤝</div>
+      <div>
+        <div class="ff-title">Legal Network (Cayman)</div>
+        <div class="ff-desc">Conyers, Maples, Ogier, Walkers — all in the ESU Cayman collaboration tracker. These firms could provide pro bono content review and become early referral partners.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div class="section-header">
+    <h2>🗺️ Build Roadmap</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="roadmap">
+    <div class="rm-item">
+      <div class="rm-phase">Phase 1 · Months 1–3</div>
+      <div>
+        <div class="rm-title">Content MVP — 5 countries as a web app</div>
+        <div class="rm-desc">Build Thailand, UK, Cayman, USA, UAE as a clean web app (Sean builds, Becca writes). Legal disclaimer framework reviewed by a lawyer. Launch quietly, gather feedback. Cost: mostly time.</div>
+      </div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-phase">Phase 2 · Months 3–6</div>
+      <div>
+        <div class="rm-title">iOS App + Emergency Mode</div>
+        <div class="rm-desc">Convert to native iOS app. Add emergency mode. Submit to App Store. Begin building lawyer directory for Phase 1 countries. Soft PR launch via Becca's LinkedIn and legal network.</div>
+      </div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-phase">Phase 3 · Months 6–12</div>
+      <div>
+        <div class="rm-title">Premium tier + Lawyer referrals + 20 countries</div>
+        <div class="rm-desc">Launch subscription. Onboard vetted lawyers per country. Expand to 20 countries based on user demand data. Consider B2B: sell to travel companies, law firms, HR teams with globally mobile staff.</div>
+      </div>
+    </div>
+    <div class="rm-item">
+      <div class="rm-phase">Phase 4 · Year 2</div>
+      <div>
+        <div class="rm-title">B2B + Expat Hub + Android</div>
+        <div class="rm-desc">Enterprise licensing to travel insurers, relocation companies, law firms. Expat Hub premium tier. Android launch. Consider raising a seed round or strategic partnership with a legal publisher.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div class="section-header">
+    <h2>✦ Questions for You</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="q-list">
+    <div class="q-item">
+      <div class="q-num">01</div>
+      <div>
+        <div class="q-text">Which countries feel most natural to start with — the ones you know personally? Thailand, UK, Cayman seem obvious. Any others you'd add?</div>
+        <div class="q-why">→ Starting with countries you've lived in or travelled extensively means your content is authentic, not generic.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">02</div>
+      <div>
+        <div class="q-text">Is the primary user a traveller, an expat, or a professional (e.g. lawyer, HR, relocation manager)? Or all three at different price points?</div>
+        <div class="q-why">→ Shapes marketing, feature prioritisation, and which revenue stream to build first.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">03</div>
+      <div>
+        <div class="q-text">Would you want to partner with law firms from day one for content review — or launch lean and add that credibility layer later?</div>
+        <div class="q-why">→ Cayman law firms (Conyers, Maples) could be early partners. Adds credibility but adds complexity.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">04</div>
+      <div>
+        <div class="q-text">Do you see this as a side project alongside ESU / your career — or something you'd want to build into a main venture eventually?</div>
+        <div class="q-why">→ Changes how much resource and speed to apply. Could start as a passion project and grow organically.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  ⚖️<br><br>
+  Concept developed for <strong>Becca Preen</strong> · March 2026<br>
+  <span style="opacity:0.5">Know your rights. Wherever you are.</span>
+</footer>
+
+</body>
+</html>
