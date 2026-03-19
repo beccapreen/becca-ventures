@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmic Daily — App Concept</title>
+<style>
+  :root {
+    --bg: #080b18;
+    --bg2: #0d1228;
+    --card: #111827;
+    --border: #1e2a4a;
+    --accent: #c9a84c;
+    --accent2: #9b6dca;
+    --accent3: #5b8dee;
+    --moon: #f0e6c8;
+    --text: #e8e4f0;
+    --muted: #8892b0;
+    --green: #4ade80;
+    --green-bg: rgba(74,222,128,0.08);
+    --purple-bg: rgba(155,109,202,0.1);
+    --gold-bg: rgba(201,168,76,0.08);
+    --blue-bg: rgba(91,141,238,0.1);
+    --red: #f87171;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Georgia', serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* STARS BG */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 25% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 40% 8%, rgba(255,255,255,0.5) 0%, transparent 100%),
+      radial-gradient(1px 1px at 60% 22%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 75% 5%, rgba(255,255,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 88% 18%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 15% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 70%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 55%, rgba(255,255,255,0.2) 0%, transparent 100%),
+      radial-gradient(1px 1px at 92% 80%, rgba(255,255,255,0.3) 0%, transparent 100%),
+      radial-gradient(2px 2px at 30% 90%, rgba(255,255,255,0.15) 0%, transparent 100%),
+      radial-gradient(1px 1px at 65% 85%, rgba(255,255,255,0.25) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 60px 24px 50px;
+    background: linear-gradient(180deg, rgba(155,109,202,0.15) 0%, transparent 100%);
+    border-bottom: 1px solid var(--border);
+  }
+  .moon-icon {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 16px;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  header .app-name {
+    font-size: 3rem;
+    letter-spacing: 0.08em;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  header .tagline {
+    font-size: 1.05rem;
+    color: var(--muted);
+    font-family: sans-serif;
+    font-style: italic;
+    max-width: 500px;
+    margin: 0 auto 20px;
+  }
+  .concept-badge {
+    display: inline-block;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 20px;
+    padding: 4px 18px;
+    font-size: 0.75rem;
+    font-family: sans-serif;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* LAYOUT */
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    margin-top: 48px;
+  }
+  .section-header h2 {
+    font-size: 1.2rem;
+    font-weight: normal;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .section-header .line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover {
+    border-color: var(--accent2);
+    transform: translateY(-2px);
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .col-span-2 { grid-column: span 2; }
+
+  /* PHONE MOCKUP */
+  .phone-section {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 40px;
+    align-items: start;
+    margin-bottom: 16px;
+  }
+  .phone-mockup {
+    background: #0a0a12;
+    border: 2px solid #2a2a3e;
+    border-radius: 44px;
+    padding: 12px;
+    box-shadow: 0 0 60px rgba(155,109,202,0.2), inset 0 0 20px rgba(0,0,0,0.5);
+  }
+  .phone-screen {
+    background: linear-gradient(160deg, #0f0a2e 0%, #1a0a3e 50%, #0a1a2e 100%);
+    border-radius: 36px;
+    padding: 28px 20px;
+    min-height: 520px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phone-screen::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 80px; height: 28px;
+    background: #0a0a12;
+    border-radius: 0 0 16px 16px;
+  }
+  .phone-time {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 3rem;
+    color: var(--moon);
+    letter-spacing: 0.05em;
+    font-weight: 200;
+  }
+  .phone-date {
+    text-align: center;
+    font-size: 0.8rem;
+    color: rgba(240,230,200,0.6);
+    font-family: sans-serif;
+    margin-bottom: 20px;
+    letter-spacing: 0.08em;
+  }
+  .phone-widget {
+    background: rgba(255,255,255,0.07);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 16px;
+    margin-bottom: 10px;
+  }
+  .pw-title {
+    font-size: 0.65rem;
+    color: rgba(240,230,200,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-family: sans-serif;
+    margin-bottom: 8px;
+  }
+  .pw-moon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .pw-moon-icon { font-size: 1.8rem; }
+  .pw-moon-text { }
+  .pw-moon-main { font-size: 0.95rem; color: var(--moon); margin-bottom: 2px; }
+  .pw-moon-sub { font-size: 0.7rem; color: rgba(240,230,200,0.5); font-family: sans-serif; }
+  .pw-cosmic {
+    font-size: 0.72rem;
+    color: rgba(201,168,76,0.9);
+    font-family: sans-serif;
+    padding: 6px 10px;
+    background: rgba(201,168,76,0.1);
+    border-radius: 8px;
+    margin-bottom: 6px;
+  }
+  .pw-affirmation {
+    font-size: 0.75rem;
+    color: rgba(240,230,200,0.8);
+    font-style: italic;
+    text-align: center;
+    padding: 8px 0 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    line-height: 1.5;
+  }
+  .pw-energy {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .pw-tag {
+    font-size: 0.6rem;
+    font-family: sans-serif;
+    padding: 3px 8px;
+    border-radius: 10px;
+    background: rgba(155,109,202,0.2);
+    color: rgba(200,180,255,0.8);
+    border: 1px solid rgba(155,109,202,0.3);
+  }
+
+  /* FEATURE CARDS */
+  .feature-icon { font-size: 1.8rem; margin-bottom: 12px; }
+  .feature-title {
+    font-size: 1rem;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .feature-desc {
+    font-size: 0.84rem;
+    font-family: sans-serif;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* VALUE PROPS */
+  .value-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    border-top: 3px solid var(--accent2);
+  }
+  .value-number {
+    font-size: 2.2rem;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .value-label {
+    font-size: 0.75rem;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .value-desc {
+    font-size: 0.83rem;
+    font-family: sans-serif;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* COSMIC EVENTS TIMELINE */
+  .cosmic-timeline { display: flex; flex-direction: column; gap: 12px; }
+  .ct-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 14px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: sans-serif;
+    font-size: 0.84rem;
+  }
+  .ct-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+  .ct-name { font-weight: bold; color: var(--text); margin-bottom: 2px; }
+  .ct-desc { color: var(--muted); font-size: 0.8rem; line-height: 1.5; }
+  .ct-badge {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 0.68rem;
+    padding: 3px 10px;
+    border-radius: 10px;
+    align-self: center;
+  }
+  .badge-active { background: rgba(74,222,128,0.1); color: var(--green); border: 1px solid rgba(74,222,128,0.2); }
+  .badge-soon { background: rgba(201,168,76,0.1); color: var(--accent); border: 1px solid rgba(201,168,76,0.2); }
+  .badge-coming { background: rgba(91,141,238,0.1); color: var(--accent3); border: 1px solid rgba(91,141,238,0.2); }
+
+  /* REVENUE MODEL */
+  .revenue-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .rev-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+  }
+  .rev-icon { font-size: 1.6rem; margin-bottom: 10px; }
+  .rev-title { font-size: 0.9rem; color: var(--accent2); margin-bottom: 6px; }
+  .rev-desc { font-size: 0.78rem; font-family: sans-serif; color: var(--muted); line-height: 1.5; }
+  .rev-price { font-size: 1.1rem; color: var(--accent); margin-top: 8px; font-family: sans-serif; }
+
+  /* QUESTIONS */
+  .q-list { display: flex; flex-direction: column; gap: 12px; }
+  .q-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 16px 20px;
+    background: var(--purple-bg);
+    border: 1px solid rgba(155,109,202,0.2);
+    border-radius: 12px;
+    font-family: sans-serif;
+    font-size: 0.88rem;
+    color: var(--text);
+  }
+  .q-num {
+    font-size: 1rem;
+    color: var(--accent2);
+    flex-shrink: 0;
+    font-weight: bold;
+    min-width: 24px;
+  }
+  .q-text { line-height: 1.6; }
+  .q-why { font-size: 0.76rem; color: var(--muted); margin-top: 4px; font-style: italic; }
+
+  /* DIFFERENTIATORS */
+  .diff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .diff-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    gap: 14px;
+  }
+  .diff-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .diff-title { font-size: 0.9rem; color: var(--text); margin-bottom: 4px; }
+  .diff-desc { font-size: 0.78rem; font-family: sans-serif; color: var(--muted); line-height: 1.5; }
+
+  /* NAME IDEAS */
+  .name-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .name-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    cursor: default;
+    transition: border-color 0.2s;
+  }
+  .name-card:hover { border-color: var(--accent); }
+  .name-card .name { font-size: 1.2rem; color: var(--accent); margin-bottom: 4px; }
+  .name-card .name-desc { font-size: 0.75rem; font-family: sans-serif; color: var(--muted); }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 40px 24px;
+    font-family: sans-serif;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+  footer strong { color: var(--accent2); }
+
+  @media (max-width: 700px) {
+    .grid-2, .grid-3, .diff-grid, .revenue-grid, .name-grid { grid-template-columns: 1fr; }
+    .phone-section { grid-template-columns: 1fr; }
+    .phone-mockup { max-width: 280px; margin: 0 auto; }
+    header .app-name { font-size: 2rem; }
+    .col-span-2 { grid-column: span 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <span class="moon-icon">🌕</span>
+  <div class="app-name">Cosmic Daily</div>
+  <p class="tagline">"Know the sky. Know yourself. Navigate your day with grace."</p>
+  <span class="concept-badge">✦ App Concept · March 2026 ✦</span>
+</header>
+
+<div class="container">
+
+  <!-- WHAT IS IT -->
+  <div class="section-header">
+    <h2>✦ The Vision</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="phone-section">
+    <div class="phone-mockup">
+      <div class="phone-screen">
+        <div class="phone-time">09:14</div>
+        <div class="phone-date">Thursday · 19 March 2026</div>
+
+        <div class="phone-widget">
+          <div class="pw-title">🌙 Lunar Phase</div>
+          <div class="pw-moon">
+            <div class="pw-moon-icon">🌖</div>
+            <div class="pw-moon-text">
+              <div class="pw-moon-main">Waning Gibbous</div>
+              <div class="pw-moon-sub">Full Moon in 9 days · Libra</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="phone-widget">
+          <div class="pw-title">⚡ Cosmic Weather Today</div>
+          <div class="pw-cosmic">☿ Mercury in Retrograde ends in 4 days</div>
+          <div class="pw-cosmic" style="background:rgba(155,109,202,0.1);color:rgba(200,180,255,0.9)">♆ Neptune season — intuition heightened</div>
+          <div class="pw-energy">
+            <span class="pw-tag">Reflective</span>
+            <span class="pw-tag">Introspective</span>
+            <span class="pw-tag">Slow down</span>
+          </div>
+        </div>
+
+        <div class="phone-widget">
+          <div class="pw-title">🌿 Today's Affirmation</div>
+          <div class="pw-affirmation">"I release what no longer serves me, and trust the path unfolding."</div>
+        </div>
+
+        <div class="phone-widget">
+          <div class="pw-title">🌅 Today's Guidance</div>
+          <div style="font-size:0.72rem;font-family:sans-serif;color:rgba(240,230,200,0.7);line-height:1.5">
+            A day for reviewing rather than launching. Avoid signing contracts. Reconnect with old friends. Trust your gut over logic today.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="margin-bottom:16px; border-left: 3px solid var(--accent2);">
+        <div style="font-size:0.78rem;font-family:sans-serif;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px">The Core Idea</div>
+        <p style="font-family:sans-serif;font-size:0.92rem;line-height:1.7;color:var(--text)">
+          A beautifully designed iPhone app (and lock screen widget) that gives you a <strong style="color:var(--accent)">daily spiritual weather report</strong> — combining lunar cycles, key astrological events, and grounded daily guidance into something you can glance at before you even get out of bed.
+          <br><br>
+          Not a full astrology app. Not a horoscope generator. Something more personal, more poetic, and more <em>useful</em> — like having a wise, calm friend who knows the cosmos and keeps you anchored.
+          <br><br>
+          The lock screen widget means the guidance is <em>ambient</em> — you absorb it naturally, the way you absorb the weather, without needing to open an app or do anything. It meets you where you already are.
+        </p>
+      </div>
+      <div class="card" style="background: var(--purple-bg); border-color: rgba(155,109,202,0.3);">
+        <div style="font-size:0.78rem;font-family:sans-serif;color:var(--accent2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">The Gap in the Market</div>
+        <p style="font-family:sans-serif;font-size:0.85rem;line-height:1.6;color:var(--muted)">
+          Existing apps (Co-Star, The Pattern, Chani) are either too dense, too dark, or require too much prior astrological knowledge. None of them prioritise the <strong style="color:var(--text)">lockscreen / ambient experience</strong>. There is a huge underserved audience who are spiritually curious but want something grounding and ADHD-friendly — not overwhelming.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section-header">
+    <h2>✦ Core Features</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">Lock Screen Widget</div>
+      <div class="feature-desc">Moon phase, today's cosmic weather tag, and a single affirmation — visible the moment you pick up your phone. iOS 16+ Live Activity support. Customisable size and style.</div>
+    </div>
+    <div class="card">
+      <div class="feature-icon">🌕</div>
+      <div class="feature-title">Lunar Calendar</div>
+      <div class="feature-desc">Full moon countdown, new moon intentions prompt, eclipse alerts, and lunar phase descriptions with practical guidance for each phase. Monthly lunar calendar view.</div>
+    </div>
+    <div class="card">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-title">Cosmic Weather Feed</div>
+      <div class="feature-desc">Plain-English summaries of major transits — Mercury Retrograde, Neptune seasons, Venus cazimi, eclipses. No jargon. Just "what does this mean for me today?"</div>
+    </div>
+    <div class="card">
+      <div class="feature-icon">🌅</div>
+      <div class="feature-title">Daily Guidance Card</div>
+      <div class="feature-desc">A fresh daily card combining the cosmic weather into practical advice: what to focus on, what to avoid, where your energy is best directed. Grounded and actionable.</div>
+    </div>
+    <div class="card">
+      <div class="feature-icon">🌿</div>
+      <div class="feature-title">Affirmations & Prompts</div>
+      <div class="feature-desc">Daily affirmation aligned to the cosmic season. Optional journalling prompt for reflection. Morning and evening modes. ADHD-friendly: one clear message, not a wall of text.</div>
+    </div>
+    <div class="card">
+      <div class="feature-icon">♑</div>
+      <div class="feature-title">Birth Chart Personalisation</div>
+      <div class="feature-desc">Optional: input your sun/moon/rising signs to personalise the guidance. Guidance shifts based on how current transits interact with your chart. Depth for those who want it.</div>
+    </div>
+  </div>
+
+  <!-- COSMIC EVENTS -->
+  <div class="section-header">
+    <h2>✦ What It Tracks — Cosmic Events</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="cosmic-timeline">
+    <div class="ct-item">
+      <div class="ct-icon">🌕</div>
+      <div><div class="ct-name">Lunar Phases</div><div class="ct-desc">New moon, waxing, full moon, waning — with intentions, release prompts, and energy guidance for each phase. The heartbeat of the app.</div></div>
+      <span class="ct-badge badge-active">Core Feature</span>
+    </div>
+    <div class="ct-item">
+      <div class="ct-icon">☿</div>
+      <div><div class="ct-name">Mercury Retrograde</div><div class="ct-desc">Countdown to start/end, daily tips (backup your files, avoid contracts, reconnect with old contacts). The most-Googled astrological event by non-astrologers.</div></div>
+      <span class="ct-badge badge-active">Core Feature</span>
+    </div>
+    <div class="ct-item">
+      <div class="ct-icon">♆</div>
+      <div><div class="ct-name">Neptune Transits</div><div class="ct-desc">Heightened intuition seasons, dreams more vivid, spiritual sensitivity elevated. Guidance shifts to creativity, rest, and inner listening.</div></div>
+      <span class="ct-badge badge-active">Core Feature</span>
+    </div>
+    <div class="ct-item">
+      <div class="ct-icon">🌑</div>
+      <div><div class="ct-name">Solar & Lunar Eclipses</div><div class="ct-desc">Major turning points. App provides advance notice, preparation prompts, and post-eclipse integration guidance.</div></div>
+      <span class="ct-badge badge-soon">High Priority</span>
+    </div>
+    <div class="ct-item">
+      <div class="ct-icon">♀</div>
+      <div><div class="ct-name">Venus Cycles</div><div class="ct-desc">Venus cazimi (heart of the sun), Venus retrograde, Venus seasons — love, beauty, values, abundance themes.</div></div>
+      <span class="ct-badge badge-soon">High Priority</span>
+    </div>
+    <div class="ct-item">
+      <div class="ct-icon">♄</div>
+      <div><div class="ct-name">Saturn & Jupiter Returns</div><div class="ct-desc">Personal milestone alerts based on birth year — Saturn return (ages 27–30), Jupiter return (every 12 years). Big-life context.</div></div>
+      <span class="ct-badge badge-coming">Phase 2</span>
+    </div>
+    <div class="ct-item">
+      <div class="ct-icon">🌸</div>
+      <div><div class="ct-name">Seasonal Wheel — Solstices & Equinoxes</div><div class="ct-desc">Pagan/Celtic seasonal calendar: Imbolc, Ostara, Beltane, Litha, Lammas, Mabon, Samhain, Yule. Grounded in nature cycles.</div></div>
+      <span class="ct-badge badge-coming">Phase 2</span>
+    </div>
+  </div>
+
+  <!-- BUSINESS VALUE -->
+  <div class="section-header">
+    <h2>✦ Business Value & Market</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:16px">
+    <div class="value-card">
+      <span class="value-number">$13.8B</span>
+      <span class="value-label">Global spirituality app market by 2028</span>
+      <div class="value-desc">The wellness and spirituality app space is growing at ~9% CAGR. Astrology apps alone generate hundreds of millions annually. Co-Star has 20M+ downloads.</div>
+    </div>
+    <div class="value-card">
+      <span class="value-number">78%</span>
+      <span class="value-label">Millennials & Gen Z interested in astrology</span>
+      <div class="value-desc">Millennials and Gen Z are driving a massive spirituality renaissance. They want tools that blend science-adjacent curiosity with personal meaning — not dogma.</div>
+    </div>
+    <div class="value-card">
+      <span class="value-number">0</span>
+      <span class="value-label">Apps focused on lock screen + grounded daily use</span>
+      <div class="value-desc">No major player owns the "ambient spiritual widget" space. Co-Star is social. The Pattern is psychological. Chani is activist. The grounded daily companion niche is open.</div>
+    </div>
+  </div>
+
+  <!-- DIFFERENTIATORS -->
+  <div class="section-header">
+    <h2>✦ What Makes It Different</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="diff-grid">
+    <div class="diff-card">
+      <div class="diff-icon">🔒</div>
+      <div>
+        <div class="diff-title">Lock Screen First</div>
+        <div class="diff-desc">No competitor owns the lock screen. This app is designed to be ambient — you see it before you check anything else. That's a different relationship with guidance.</div>
+      </div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">🌍</div>
+      <div>
+        <div class="diff-title">Grounded, Not Woo</div>
+        <div class="diff-desc">Spiritual but practical. Each cosmic event translates to a clear action: what to do, what to pause, where to focus. Never scary, never vague. Useful first.</div>
+      </div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">🧠</div>
+      <div>
+        <div class="diff-title">ADHD-Friendly Design</div>
+        <div class="diff-desc">One message per day. Clean layout. No information overload. Designed for people who need clarity, not complexity. Big underserved audience.</div>
+      </div>
+    </div>
+    <div class="diff-card">
+      <div class="diff-icon">🌙</div>
+      <div>
+        <div class="diff-title">Plain English Cosmic Weather</div>
+        <div class="diff-desc">No prerequisite astrological knowledge required. "Mercury is retrograde — here's what that means today" not "Mercury squares Saturn in Capricorn."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVENUE -->
+  <div class="section-header">
+    <h2>✦ Revenue Model</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="revenue-grid">
+    <div class="rev-card">
+      <div class="rev-icon">🆓</div>
+      <div class="rev-title">Free Tier</div>
+      <div class="rev-desc">Daily affirmation, moon phase widget, Mercury retrograde alerts. Enough to be genuinely useful — builds habit and trust.</div>
+      <div class="rev-price">Free forever</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-icon">✨</div>
+      <div class="rev-title">Premium — Cosmic</div>
+      <div class="rev-desc">Full daily guidance, all cosmic events, personalised by birth chart, seasonal wheel, journalling prompts, custom widget themes.</div>
+      <div class="rev-price">~$4.99/month</div>
+    </div>
+    <div class="rev-card">
+      <div class="rev-icon">🌟</div>
+      <div class="rev-title">Annual + Bundles</div>
+      <div class="rev-desc">Annual subscription discount. Gift subscriptions. Potential: branded affirmation card decks, guided audio meditations, community access.</div>
+      <div class="rev-price">~$39.99/year</div>
+    </div>
+  </div>
+
+  <!-- NAME IDEAS -->
+  <div class="section-header">
+    <h2>✦ Possible Names</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="name-grid">
+    <div class="name-card"><div class="name">Lunara</div><div class="name-desc">Moon-centred, feminine, memorable</div></div>
+    <div class="name-card"><div class="name">Cosmic Daily</div><div class="name-desc">Clear, searchable, functional</div></div>
+    <div class="name-card"><div class="name">Celestine</div><div class="name-desc">Elegant, spiritual, timeless</div></div>
+    <div class="name-card"><div class="name">Orbit</div><div class="name-desc">Clean, modern, crossover appeal</div></div>
+    <div class="name-card"><div class="name">Vessel</div><div class="name-desc">Poetic — you as a vessel for cosmic energy</div></div>
+    <div class="name-card"><div class="name">The Daily Sky</div><div class="name-desc">Grounded, approachable, clear</div></div>
+  </div>
+
+  <!-- CLARIFYING QUESTIONS -->
+  <div class="section-header">
+    <h2>✦ Questions for You</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="q-list">
+    <div class="q-item">
+      <div class="q-num">01</div>
+      <div>
+        <div class="q-text">Which spiritual traditions feel most authentic to you — Western astrology, lunar/pagan cycles, Buddhist/Vedic, a blend? This shapes the whole tone and content.</div>
+        <div class="q-why">→ Determines whether we lean Celtic wheel, Vedic astrology, Western tropical, or a modern eclectic blend.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">02</div>
+      <div>
+        <div class="q-text">How personal do you want the guidance to be? Purely cosmic (universal for everyone) or personalised by birth chart (sun/moon/rising)?</div>
+        <div class="q-why">→ Personalisation adds huge value but also complexity. Could be a free vs premium differentiator.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">03</div>
+      <div>
+        <div class="q-text">What's the emotional tone you want the app to strike? Options: calm & meditative / warm & encouraging / wise & poetic / practical & direct — or a mix?</div>
+        <div class="q-why">→ Defines the writing voice for all affirmations, guidance cards, and cosmic summaries.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">04</div>
+      <div>
+        <div class="q-text">Is this something you'd want to build yourself (with Sean's help), license the concept, or explore as a side business? That changes how deep we go.</div>
+        <div class="q-why">→ Shapes whether we go to MVP prototype, pitch deck, or full product spec.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">05</div>
+      <div>
+        <div class="q-text">Beyond astrology, are there other systems you'd want included — numerology, Human Design, tarot archetypes, Gene Keys, moon mansions?</div>
+        <div class="q-why">→ Each system has a passionate following and could expand the addressable market significantly.</div>
+      </div>
+    </div>
+    <div class="q-item">
+      <div class="q-num">06</div>
+      <div>
+        <div class="q-text">Who is the primary user in your mind — someone like you (ambitious, ADHD-friendly, grounding needed), or broader? And do you see this as a solo tool or something with a community/sharing element?</div>
+        <div class="q-why">→ Determines UX priorities and whether social features (sharing your daily card, etc.) are worth building.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span style="font-size:1.2rem">🌙</span><br><br>
+  Concept developed for <strong>Becca Preen</strong> · March 2026<br>
+  <span style="opacity:0.5">The sky has always been our first calendar. This is just putting it in your pocket.</span>
+</footer>
+
+</body>
+</html>
